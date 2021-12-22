@@ -1,0 +1,27 @@
+get:
+  tags:
+    - Order
+  summary: 'Order - Tracking'
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: integer
+      required: true
+      description: id of an existing order
+  operationId: getTracking
+  description:
+    This will return any tracking events from the shipping company for the specified order
+  responses:
+    '200':
+      description: get tracking events for specified order
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/tracking'
+    '400':
+      description: 'invalid input, object invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/standard_error'

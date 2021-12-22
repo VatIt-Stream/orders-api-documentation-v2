@@ -1,0 +1,14 @@
+type: object
+properties:
+  description:
+    type: string
+    example: Fuel Surcharge
+  cost:
+    type: number
+    example: 469.95
+  invoice_section:
+    type: string
+    example: Express Rate Fees
+  currency_id:
+    type: string
+    example: USD

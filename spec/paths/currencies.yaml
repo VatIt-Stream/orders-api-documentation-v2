@@ -1,0 +1,13 @@
+get:
+  summary: Currencies
+  tags:
+    - Static Data
+  responses:
+    '200':
+      description: fetch all the 'currency' items
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/currency'

@@ -1,0 +1,7 @@
+specFileName: /Users/toma/Dev/api-order-management/open-api.yml
+apiTitle: Stream Orders Api
+splitSpec: true
+codeSamples: false
+swaggerUI: true
+travis: false
+oasVersion: 3.0.0

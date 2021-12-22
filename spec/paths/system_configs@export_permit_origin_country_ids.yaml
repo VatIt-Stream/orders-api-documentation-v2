@@ -1,0 +1,13 @@
+get:
+  summary: Export Permit Origin Country Ids
+  tags:
+    - Static Data
+  responses:
+    '200':
+      description: This will fetch ids (as returned by the /countries endpoint) of all the countries that require an export permit. Export permits are required for orders leaving the specified countries before it is possible to generate waybill.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/export_permit_origin_country_id'

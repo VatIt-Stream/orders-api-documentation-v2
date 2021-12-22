@@ -1,0 +1,44 @@
+type: object
+required:
+  - name
+  - address_1
+  - city
+  - province
+  - postal_code
+  - country_id
+  - email
+  - phone
+properties:
+  name:
+    type: string
+    example: My House
+  company:
+    type: string
+    example: Company Name
+  address_1:
+    type: string
+    example: Abbey Road
+  address_2:
+    type: string
+    example: Putney
+  city:
+    type: string
+    example: London
+  province:
+    type: string
+    example: London
+  postal_code:
+    type: string
+    example: SW1A 2AA
+  import_code:
+    type: string
+    example: 'GB000000000000'
+  country_id:
+    type: integer
+    example: 212
+  email:
+    type: string
+    example: example@stream.com
+  phone:
+    type: string
+    example: '+27825547358'

@@ -1,0 +1,7 @@
+type: object
+properties:
+  shipment_events:
+    type: array
+    items:
+      $ref: '#/components/schemas/shipment_event'
+

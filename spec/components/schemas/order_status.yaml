@@ -1,0 +1,15 @@
+type: object
+required:
+  - id
+  - description
+  - value
+properties:
+  id:
+    type: number
+    example: 1
+  description:
+    type: string
+    example: In Transit
+  value:
+    type: string
+    example: in_transit

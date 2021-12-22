@@ -1,0 +1,12 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 1
+  description:
+    type: string
+    example: Shipment Protection Fee
+  accounting_dimension:
+    type: object
+    items: null
+    $ref: '#/components/schemas/accounting_dimension'

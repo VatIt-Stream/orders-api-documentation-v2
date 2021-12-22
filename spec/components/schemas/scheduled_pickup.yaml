@@ -1,0 +1,29 @@
+type: object
+properties:
+  scheduled_pickup:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 14
+      time_from:
+        type: string
+        example: '12:00'
+      time_to:
+        type: string
+        example: '16:00.00'
+      scheduled_date:
+        type: string
+        example: 14-01-2020
+      confirmation_number:
+        type: string
+        example: DSD5659S
+      status:
+        type: string
+        example: system_to_schedule
+      freight_confirmation_number:
+        type: string
+        example: SFEWF65
+      error_message:
+        type: string
+        example: Invalid time requested

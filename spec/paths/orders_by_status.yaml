@@ -1,0 +1,19 @@
+get:
+  parameters:
+    - in: query
+      name: status
+      schema:
+        type: string
+        example: in_transit
+      description: Filter to orders in this status
+  summary: Orders
+  tags:
+    - Order
+  responses:
+    '200':
+      description: fetch all the order_ids
+      content:
+        application/json:
+          schema:
+            type: object
+            example: { order_ids: [1, 2] }

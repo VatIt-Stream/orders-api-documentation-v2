@@ -1,0 +1,11 @@
+type: object
+properties:
+  api_user:
+    type: object
+    properties:
+      email:
+        type: string
+        example: email@email.com
+      password:
+        type: string
+        example: p@55w0rd

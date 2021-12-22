@@ -1,0 +1,44 @@
+type: object
+required:
+  - name
+  - address_1
+  - city
+  - province
+  - postal_code
+  - country_id
+  - email
+  - phone
+properties:
+  name:
+    type: string
+    example: My House
+  company:
+    type: string
+    example: Company Name
+  address_1:
+    type: string
+    example: 5 Open Street
+  address_2:
+    type: string
+    example: Melrose Arch
+  city:
+    type: string
+    example: Johannesburg
+  province:
+    type: string
+    example: Gauteng
+  postal_code:
+    type: string
+    example: '2196'
+  country_id:
+    type: integer
+    example: 226
+  export_code:
+    type: string
+    example: 'ZA000000000000'
+  email:
+    type: string
+    example: example@stream.com
+  phone:
+    type: string
+    example: '+27825547358'

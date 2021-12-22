@@ -1,0 +1,32 @@
+post:
+  tags:
+    - Quote
+  summary: 'Quote'
+  operationId: createQuote
+  description: >
+    Create a quote on the system, which will then have several estimates
+    associated to it on which an order can be placed.
+
+    <br>
+    <br>
+    These are called estimatesas the final costs will be determined when the underlying provider measures
+    the packages and provides a final official billable weight.
+  responses:
+    '201':
+      description: item created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/quote_response'
+    '400':
+      description: 'invalid input, object invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/standard_error'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/quote_request'
+    description: Inventory item to add

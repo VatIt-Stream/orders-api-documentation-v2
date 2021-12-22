@@ -1,0 +1,11 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 1
+  name:
+    type: string
+    example: Serbia
+  iso_code_2:
+    type: string
+    example: RS

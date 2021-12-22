@@ -1,0 +1,27 @@
+get:
+  tags:
+    - Order
+  summary: 'Order - Pickup Availabilities'
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: integer
+      required: true
+      description: id of an existing order
+  operationId: getAvailabilities
+  description: >
+    This will return an array of availabilities which specify specific dates, times and durations in the near future where a pickup can be scheduled for the specified order
+  responses:
+    '200':
+      description: get pickup availabilities for specified order
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/pickup_availabilties'
+    '400':
+      description: 'invalid input, object invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/standard_error'
