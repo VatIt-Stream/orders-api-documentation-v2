@@ -1,47 +1,11 @@
 openapi: 3.0.0
 servers:
   - description: SwaggerHub API Auto Mocking
-    url: "https://stream-orders-api-sandbox.herokuapp.com/client_api/v1/"
+    url: "https://stream-orders-api-sandbox.herokuapp.com/client_api/v2/"
   - description: Production Endpoint
-    url: "https://orders-api-production.vatit-stream.com/client_api/v1/"
+    url: "https://orders-api-production.vatit-stream.com/client_api/v2/"
 info:
-  description: |
-
-    <b>Version 1.4.5 (2020-06-18) - API Documentation for Stream</b>
-    <ul>
-      <li>Added import and export code when posting to orders for origin and destination address.
-    </ul>
-    <b>Version 1.4.4 (2020-06-18) - API Documentation for Stream</b>
-    <ul>
-      <li>Added max and min lenghts for address fields, see Address schema for more.</li>
-    </ul>
-    <b>Version 1.4.3 (2020-06-15) - API Documentation for Stream</b>
-    <ul>
-      <li>Changed broker and importer of record in request body for Orders POST</li>
-      <li>Changed broker and importer of record in response body for Orders POST</li>
-    </ul>
-    <b>Version 1.4.2 (2020-05-08) - API Documentation for Stream</b>
-    <ul>
-      <li>Updated quote response body</li>
-    </ul>
-    <br>
-    <b>Version 1.4.1 (2020-04-28) - API Documentation for Stream</b>
-    <ul>
-      <li>Added instructions for downloading files related to an order.</li>
-      <li>Allowed posting of HS codes for an order. See order POST </li>
-      <li>Added functionality to cancel an order. See order DELETE </li>
-      <li>Added functionality to add an importer of record and broker. See order POST </li>
-    </ul>
-    <br>
-    <b>Version 1.4.0 (2020-04-09) - API Documentation for Stream</b>
-    <ul>
-      <li>Certain endpoints may be subject to rate limiting. In this case, a response code of 429 will be returned. See POST orders.</li>
-      <li>Export permits endpoint exposed. See static data section.</li>
-      <li>Only one order will be able to be placed on an quote_estimate_id, once a quote_estimate_id has an order associated to it you will need to request a new quote and get a new estimate</li>
-    </ul>
-    <br>
-
-  version: 1.4.4
+  version: 2.0
   title: >-
     Stream API
   contact:

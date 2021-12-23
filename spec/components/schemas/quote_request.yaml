@@ -13,12 +13,14 @@ required:
   - distance_unit
   - packages
 properties:
-  origin_country_id:
-    type: integer
-    example: 226
-  destination_country_id:
-    type: integer
-    example: 212
+  origin_address:
+    type: object
+    items: null
+    $ref: '#/components/schemas/origin_address'
+  destination_address:
+    type: object
+    items: null
+    $ref: '#/components/schemas/destination_address'
   value_of_goods:
     type: string
     format: Money
