@@ -1,0 +1,14 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 1
+  description:
+    type: string
+    example: 'Shipment picked up'
+  date_time:
+    type: string
+    example: '2019-12-20T16:40:03.000Z'
+  location:
+    type: string
+    example: 'America/Chicago'

@@ -1,0 +1,19 @@
+type: object
+required:
+  - weight
+  - width
+  - height
+  - length
+properties:
+  weight:
+    type: number
+    example: 5.5
+  width:
+    type: number
+    example: 5.5
+  height:
+    type: number
+    example: 5.5
+  length:
+    type: number
+    example: 5.5

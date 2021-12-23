@@ -1,0 +1,13 @@
+get:
+  summary: Purpose of Shipment (or IncoTerms)
+  tags:
+    - Static Data
+  responses:
+    '200':
+      description: fetch all the 'purpose_of_shipment' items. Also known as the IncoTerms
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/purpose_of_shipment'

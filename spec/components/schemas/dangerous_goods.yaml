@@ -1,0 +1,6 @@
+required:
+  - un_code
+properties:
+  un_code:
+    type: string
+    example: UN3090

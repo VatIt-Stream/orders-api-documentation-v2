@@ -1,0 +1,33 @@
+get:
+  tags:
+    - Quote
+  summary: 'Quote'
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: integer
+      required: true
+      description: id of an existing quote
+  operationId: getQuote
+  description: >
+    This will return the available pricing options (estimates) for the quote
+    details supplied
+    <br>
+    <br>
+    The transit times are an estimate from the service providers and from historical shipments.
+    The values returned are in days.
+
+  responses:
+    '200':
+      description: get a quote that was created recently
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/quote_response'
+    '400':
+      description: 'invalid input, object invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/standard_error'

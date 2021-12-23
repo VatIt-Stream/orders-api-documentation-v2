@@ -1,0 +1,61 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 1
+  estimates:
+    type: array
+    items:
+      $ref: '#/components/schemas/estimate'
+  # origin_country_id:
+  #   type: integer
+  #   example: 1
+  # destination_country_id:
+  #   type: integer
+  #   example: 2
+  # value_of_goods:
+  #   type: string
+  #   format: Money
+  #   example: '600.00'
+  # value_of_goods_currency_id:
+  #   type: string
+  #   format: 3 Digit Currency Code
+  #   example: ZAR
+  # purpose_of_shipment_id:
+  #   type: integer
+  #   example: 8
+  # is_document:
+  #   type: boolean
+  #   example: true
+  # is_stackable:
+  #   type: boolean
+  #   example: true
+  # is_shipment_protection_required:
+  #   type: boolean
+  #   example: true
+  # dangerous_goods_present:
+  #   type: boolean
+  #   example: false
+  # distance_unit:
+  #   type: string
+  #   format: cm/in
+  #   example: cm
+  # mass_unit:
+  #   type: string
+  #   format: kg/lb
+  #   example: kg
+  # iata_approved:
+  #   type: boolean
+  #   example: true
+  # packages:
+  #   type: array
+  #   items:
+  #     $ref: '#/components/schemas/package'
+  # dangerous_goods:
+  #   type: array
+  #   items:
+  #     $ref: '#/components/schemas/dangerous_goods'
+  # hs_codes:
+  #   type: array
+  #   items:
+  #     $ref: '#/components/schemas/hs_code'

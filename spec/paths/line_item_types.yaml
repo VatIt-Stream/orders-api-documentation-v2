@@ -1,0 +1,13 @@
+get:
+  summary: Line Item Types
+  tags:
+    - Static Data
+  responses:
+    '200':
+      description: fetch all the 'line item types' items
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/line_item_type'

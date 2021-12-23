@@ -1,0 +1,30 @@
+post:
+  tags:
+    - Initial Authentication
+  summary: Create a JWT token for subsequent requests
+  description: >
+    Post in the username and password credentials to receive a JWT token to
+    be used for authentication. <br/><br/>
+
+    Once you have done this and received the response token, you may use it in the
+    Header of subsequent requests for authentication:<br/><br/>
+
+    `Authorization: Bearer {INSERT TOKEN HERE}` <br/><br/>
+
+    The token will last for 6 hours or until midnight (GMT), whichever is longer, after which a new token will need to be
+    generated
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/auth'
+  security: []
+  responses:
+    '200':
+      description: Successful authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/auth_response'
+    '401':
+      $ref: '#/components/responses/UnauthorizedError'

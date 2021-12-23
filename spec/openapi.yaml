@@ -1,0 +1,34 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: "https://stream-orders-api-sandbox.herokuapp.com/client_api/v2/"
+  - description: Production Endpoint
+    url: "https://orders-api-production.vatit-stream.com/client_api/v2/"
+info:
+  version: 2.0
+  title: >-
+    Stream API
+  contact:
+    email: developers@vatitstream.com
+tags:
+  - name: Initial Authentication
+    description: Used to generate the bearer token
+  - name: Quote
+    description: The flow for creating and fetching quotes
+  - name: Order
+    description: >-
+      The flow for creating and fetching orders along with additional operations
+      which can be performed on orders.
+      <br>
+      <br>
+      <strong>A note for the addresses posted</strong>: Import and Export code refer to specific codes used for importing/exporting to different countries
+      eg.
+      <ul>
+        <li>ZA: Import Number/Export Number</li>
+        <li>USA: EIN</li>
+        <li>UK: EORI</li>
+      </ul>
+  - name: Static Data
+    description: Used for lookup of information
+security:
+  - bearerAuth: []

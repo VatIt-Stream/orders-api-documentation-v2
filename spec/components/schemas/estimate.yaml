@@ -1,0 +1,77 @@
+type: object
+properties:
+  shipping_company:
+    type: string
+    example: FedEx USA
+  shipping_service:
+    type: string
+    example: Express Priority
+  estimate_id:
+    type: integer
+    example: 55788
+  quote_expired:
+    type: boolean
+    example: false
+  line_items:
+    type: array
+    items:
+      $ref: '#/components/schemas/line_item'
+  transit_detail:
+    type: object
+    properties:
+      min_transit_time:
+        type: integer
+        format: in terms of Days, i.e 1 Day
+        example: 1
+      max_transit_time:
+        type: integer
+        format: in terms of Days, i.e 5 Day
+        example: 5
+      transit_time_note:
+        type: string
+        example: clearance delay possible
+  billable_weight:
+    type: object
+    properties:
+      metric:
+        type: object
+        properties:
+          packages:
+            type: integer
+            example: '2,'
+          mass_unit:
+            type: string
+            example: kg
+          distance_unit:
+            type: string
+            example: cm
+          volumetric_weight:
+            type: number
+            example: 50
+          weight:
+            type: number
+            example: 100
+          billable_weight:
+            type: number
+            example: 100
+      imperial:
+        type: object
+        properties:
+          packages:
+            type: integer
+            example: 2
+          mass_unit:
+            type: string
+            example: lb
+          distance_unit:
+            type: string
+            example: inches
+          volumetric_weight:
+            type: number
+            example: 110.231
+          weight:
+            type: number
+            example: 220.462
+          billable_weight:
+            type: number
+            example: 220.462

@@ -1,0 +1,53 @@
+type: object
+required:
+  - name
+  - address_1
+  - city
+  - province
+  - postal_code
+  - country_id
+  - email
+  - phone
+properties:
+  name:
+    type: string
+    maxLength: 35
+    example: My House
+  company:
+    type: string
+    maxLength: 35
+    example: Company Name
+  address_1:
+    type: string
+    maxLength: 34
+    example: 5 Open Street
+  address_2:
+    type: string
+    maxLength: 34
+    example: Melrose Arch
+  city:
+    type: string
+    maxLength: 20
+    example: Johannesburg
+  province:
+    type: string
+    maxLength: 35
+    example: Gauteng
+  postal_code:
+    type: string
+    example: '1610'
+  import_code:
+    type: string
+    example: 'GB000000000000'
+  export_code:
+    type: string
+    example: 'GB000000000000'
+  country_id:
+    type: integer
+    example: 226
+  email:
+    type: string
+    example: example@stream.com
+  phone:
+    type: string
+    example: '+27825547358'

@@ -1,0 +1,48 @@
+type: object
+required:
+  - vat_number
+  - import_code
+  - address_1
+  - city
+  - province
+  - postal_code
+  - country_id
+  - email
+  - phone
+properties:
+  name:
+    type: string
+    example: My House
+  company:
+    type: string
+    example: Company Name
+  address_1:
+    type: string
+    example: 5 Open Street
+  address_2:
+    type: string
+    example: Melrose Arch
+  city:
+    type: string
+    example: Johannesburg
+  province:
+    type: string
+    example: Gauteng
+  postal_code:
+    type: string
+    example: '1610'
+  country_id:
+    type: integer
+    example: 226
+  email:
+    type: string
+    example: example@stream.com
+  phone:
+    type: string
+    example: '+27825547358'
+  vat_number:
+    type: string
+    example: 'BF4887450'
+  import_code:
+    type: string
+    example: 'S1A485'

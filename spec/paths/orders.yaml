@@ -1,0 +1,33 @@
+post:
+  tags:
+    - Order
+  summary: Order
+  operationId: createOrder
+  description: >
+    Creates an order on the stream system. If you will be uploading the files
+    such as the commercial invoice or materials safety data sheet, you can use a
+    'multipart/form-data' request body type instead
+  responses:
+    '201':
+      description: item created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/order_response'
+    '400':
+      description: 'invalid input, object invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/standard_error'
+    '429':
+      description: 'Rate limit exceeded'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/rate_limit_error'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/order'

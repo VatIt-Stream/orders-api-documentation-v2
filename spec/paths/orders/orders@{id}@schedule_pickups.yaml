@@ -1,0 +1,32 @@
+post:
+  tags:
+    - Order
+  summary: 'Order - Scheduled Pickups'
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: integer
+      required: true
+      description: id of an existing order
+  operationId: createScheduledPickup
+  description: >
+    This will create a scheudled pickup for the specified order and attempt to schedule the pickup with the shipping company of the order, if this fails an appropriate error message will be returned and the Stream team will be notified of the failure
+  responses:
+    '201':
+      description: item created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scheduled_pickup'
+    '400':
+      description: 'invalid input, object invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/standard_error'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/scheduled_pickup_request'

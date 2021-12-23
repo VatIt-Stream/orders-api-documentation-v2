@@ -1,0 +1,13 @@
+get:
+  summary: Order statuses
+  tags:
+    - Static Data
+  responses:
+    "200":
+      description: fetch all the different statuses an order may be in
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/order_status"

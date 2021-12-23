@@ -1,0 +1,14 @@
+type: object
+properties:
+  scheduled_pickup:
+    type: object
+    properties:
+      time_from:
+        type: string
+        example: '12:00'
+      time_to:
+        type: string
+        example: '16:00.00'
+      scheduled_date:
+        type: string
+        example: 14-01-2020

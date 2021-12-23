@@ -1,0 +1,32 @@
+type: object
+required:
+  - code
+  - cost
+  - description
+  - quantity
+  - weight
+  - country_id
+properties:
+  code:
+    type: string
+    example: 100322
+  cost:
+    type: string
+    example: 100
+  description:
+    type: string
+    example: networking equipment
+  quantity:
+    type: integer
+    example: 5
+  weight:
+    type: number
+    example: 1.1
+  eccn:
+    type: string
+    format: 5 digit number
+    example: 12345
+  country_id:
+    type: integer
+    format: (country of origin of goods)
+    example: 5
