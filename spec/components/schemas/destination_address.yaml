@@ -35,7 +35,7 @@ properties:
     example: 'GB000000000000'
   country_id:
     type: integer
-    example: 212
+    example: 70
   email:
     type: string
     example: example@stream.com
