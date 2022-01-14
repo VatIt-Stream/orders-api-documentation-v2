@@ -3,16 +3,16 @@
   "servers": [
     {
       "description": "SwaggerHub API Auto Mocking",
-      "url": "https://stream-orders-api-sandbox.herokuapp.com/client_api/v1/"
+      "url": "https://stream-orders-api-sandbox.herokuapp.com/client_api/v2/"
     },
     {
       "description": "Production Endpoint",
-      "url": "https://orders-api-production.vatit-stream.com/client_api/v1/"
+      "url": "https://orders-api-production.vatit-stream.com/client_api/v2/"
     }
   ],
   "info": {
-    "description": "\n<p> <b> Find our version 2 docs here <a href=\"https://orders-api-v2-docs.vatit-stream.com/swagger-ui/#/\"> https://orders-api-v2-docs.vatit-stream.com/swagger-ui/#/ </a> </b> </p>\n<b>Update 1.4.6 (2022-01-14) - API Documentation for Stream</b>\n<ul>\n  <li>Improved error messaging from failed interactions with service providers.\n</ul>\n<b>Update 1.4.5 (2020-06-18) - API Documentation for Stream</b>\n<ul>\n  <li>Added import and export code when posting to orders for origin and destination address.\n</ul>\n<b>Update 1.4.4 (2020-06-18) - API Documentation for Stream</b>\n<ul>\n  <li>Added max and min lengths for address fields, see Address schema for more.</li>\n</ul>\n<b>Update 1.4.3 (2020-06-15) - API Documentation for Stream</b>\n<ul>\n  <li>Changed broker and importer of record in request body for Orders POST</li>\n  <li>Changed broker and importer of record in response body for Orders POST</li>\n</ul>\n<b>Update 1.4.2 (2020-05-08) - API Documentation for Stream</b>\n<ul>\n  <li>Updated quote response body</li>\n</ul>\n<br>\n<b>Update 1.4.1 (2020-04-28) - API Documentation for Stream</b>\n<ul>\n  <li>Added instructions for downloading files related to an order.</li>\n  <li>Allowed posting of HS codes for an order. See order POST </li>\n  <li>Added functionality to cancel an order. See order DELETE </li>\n  <li>Added functionality to add an importer of record and broker. See order POST </li>\n</ul>\n<br>\n<b>Update 1.4.0 (2020-04-09) - API Documentation for Stream</b>\n<ul>\n  <li>Certain endpoints may be subject to rate limiting. In this case, a response code of 429 will be returned. See POST orders.</li>\n  <li>Export permits endpoint exposed. See static data section.</li>\n  <li>Only one order will be able to be placed on an quote_estimate_id, once a quote_estimate_id has an order associated to it you will need to request a new quote and get a new estimate</li>\n</ul>\n<br>\n",
-    "version": 1,
+    "description": "<i> Please note that the v2 endpoint is in beta and is actively changing. </i>\n<p> <b> Find our version 1 docs here <a href=\"https://orders-api-v2-docs.vatit-stream.com/swagger-ui/#/\"> https://orders-api-docs.vatit-stream.com/swagger-ui/#/ </a> </b> </p>\n<b>Update 2.1 (2022-01-14) - Separate Waybills Endpoint</b>\n<ul>\n  <li>Improved error messages from service providers.\n  <li>Placing an order and generating a waybill have been separated into 2 separate endpoints.\n  <li>Place an order by posting to <i>/orders</i> endpoint.\n  <li>Generate waybill with a post to <i>/orders/{order_id}/waybills</i>. </i>\n</ul>\n<b>Update 2.0 (2021-12-23) - API Documentation for Stream</b>\n<ul>\n  <li>Added the ability to send in full address details at the quoting stage.\n</ul>\n",
+    "version": 2,
     "title": "Stream API",
     "contact": {
       "email": "developers@vatitstream.com"
@@ -475,6 +475,49 @@
         }
       }
     },
+    "/orders/{id}/waybills": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order - Waybills",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "id of an existing order"
+          }
+        ],
+        "operationId": "generateWaybill",
+        "description": "This will generate a waybill for the specified order",
+        "responses": {
+          "200": {
+            "description": "generate waybill for specified order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tracking"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/standard_error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/purpose_of_shipments": {
       "get": {
         "summary": "Purpose of Shipment (or IncoTerms)",
@@ -505,7 +548,7 @@
         ],
         "summary": "Quote",
         "operationId": "createQuote",
-        "description": "Create a quote on the system, which will then have several estimates associated to it on which an order can be placed.\n<br> <br> These are called estimates the final costs will be determined when the underlying provider measures the packages and provides a final official billable weight.\n",
+        "description": "Create a quote on the system, which will then have several estimates associated to it on which an order can be placed.\n<br> <br> These are called estimatesas the final costs will be determined when the underlying provider measures the packages and provides a final official billable weight.\n",
         "responses": {
           "201": {
             "description": "item created",
@@ -1545,13 +1588,15 @@
           "packages"
         ],
         "properties": {
-          "origin_country_id": {
-            "type": "integer",
-            "example": 226
+          "origin_address": {
+            "type": "object",
+            "items": null,
+            "$ref": "#/components/schemas/origin_address"
           },
-          "destination_country_id": {
-            "type": "integer",
-            "example": 212
+          "destination_address": {
+            "type": "object",
+            "items": null,
+            "$ref": "#/components/schemas/destination_address"
           },
           "value_of_goods": {
             "type": "string",
