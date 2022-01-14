@@ -1,0 +1,1800 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://stream-orders-api-sandbox.herokuapp.com/client_api/v2/"
+    },
+    {
+      "description": "Production Endpoint",
+      "url": "https://orders-api-production.vatit-stream.com/client_api/v2/"
+    }
+  ],
+  "info": {
+    "description": "<i> Please note that the v2 endpoint is in beta and is actively changing. </i>\n<p> <b> Find our version 1 docs here <a href=\"https://orders-api-v2-docs.vatit-stream.com/swagger-ui/#/\"> https://orders-api-docs.vatit-stream.com/swagger-ui/#/ </a> </b> </p>\n<b>Update 2.1 (2022-01-14) - Separate Waybills Endpoint</b>\n<ul>\n  <li>Improved error messages from service providers.\n  <li>Placing an order and generating a waybill have been separated into 2 separate endpoints.\n  <li>Place an order by posting to <i>/orders</i> endpoint.\n  <li>Generate waybill with a post to <i>/orders/{order_id}/waybills</i>. </i>\n</ul>\n<b>Update 2.0 (2021-12-23) - API Documentation for Stream</b>\n<ul>\n  <li>Added the ability to send in full address details at the quoting stage.\n</ul>\n",
+    "version": 2,
+    "title": "Stream API",
+    "contact": {
+      "email": "developers@vatitstream.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "Initial Authentication",
+      "description": "Used to generate the bearer token"
+    },
+    {
+      "name": "Quote",
+      "description": "The flow for creating and fetching quotes"
+    },
+    {
+      "name": "Order",
+      "description": "The flow for creating and fetching orders along with additional operations which can be performed on orders. <br> <br> <strong>A note for the addresses posted</strong>: Import and Export code refer to specific codes used for importing/exporting to different countries eg. <ul>\n  <li>ZA: Import Number/Export Number</li>\n  <li>USA: EIN</li>\n  <li>UK: EORI</li>\n</ul>"
+    },
+    {
+      "name": "Static Data",
+      "description": "Used for lookup of information"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/auth/sign_in": {
+      "post": {
+        "tags": [
+          "Initial Authentication"
+        ],
+        "summary": "Create a JWT token for subsequent requests",
+        "description": "Post in the username and password credentials to receive a JWT token to be used for authentication. <br/><br/>\nOnce you have done this and received the response token, you may use it in the Header of subsequent requests for authentication:<br/><br/>\n`Authorization: Bearer {INSERT TOKEN HERE}` <br/><br/>\nThe token will last for 6 hours or until midnight (GMT), whichever is longer, after which a new token will need to be generated\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth"
+              }
+            }
+          }
+        },
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/auth_response"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/countries": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "show_all",
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ]
+            },
+            "description": "Select true not to paginate the results."
+          }
+        ],
+        "summary": "Countries",
+        "tags": [
+          "Static Data"
+        ],
+        "responses": {
+          "200": {
+            "description": "fetch all the 'country' items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/country"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/currencies": {
+      "get": {
+        "summary": "Currencies",
+        "tags": [
+          "Static Data"
+        ],
+        "responses": {
+          "200": {
+            "description": "fetch all the 'currency' items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/currency"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/line_item_types": {
+      "get": {
+        "summary": "Line Item Types",
+        "tags": [
+          "Static Data"
+        ],
+        "responses": {
+          "200": {
+            "description": "fetch all the 'line item types' items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/line_item_type"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order_statuses": {
+      "get": {
+        "summary": "Order statuses",
+        "tags": [
+          "Static Data"
+        ],
+        "responses": {
+          "200": {
+            "description": "fetch all the different statuses an order may be in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/order_status"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders_by_status": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "example": "in_transit"
+            },
+            "description": "Filter to orders in this status"
+          }
+        ],
+        "summary": "Orders",
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "fetch all the order_ids",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "order_ids": [
+                      1,
+                      2
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order",
+        "operationId": "createOrder",
+        "description": "Creates an order on the stream system. If you will be uploading the files such as the commercial invoice or materials safety data sheet, you can use a 'multipart/form-data' request body type instead\n",
+        "responses": {
+          "201": {
+            "description": "item created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/order_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/standard_error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rate_limit_error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/order"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "id or reference_number of an existing order"
+          }
+        ],
+        "operationId": "getOrder",
+        "description": "This will return all the details of the specified order.\n<br><br>`NOTE` <ul>\n  <li>When the order is finalized and an invoice has been issued the <b>invoice_data</b> field will be populated in the response. Prior to invoicing <b>invoice_data</b> will be blank.</li>\n  <li>The Vat & Duties will be a line item in the <b>invoice_data</b>, again this will only appear when the order is invoiced and the VAT & Duties are finalized and confirmed to be accurate.</li>\n  <li>All document fields ending with <b>_link</b> will have a temporary link to the file, each time a new GET request is made a new link will be generated with a new expiry.</li>\n</ul>\n\n`Downloading files (such as the customs clearance documents)`<ul>\n  <li>All documents for an order are available by performing a GET request to the URL of the document.</li>\n  <li>This URL is provided in the order parameters returned by this GET request and include the _link suffix.</li>\n  <li>All links expire within a short period after this initial GET request, if you experience a broken document link you will need to repeat this order GET request.</li>\n  <li>This order GET response does not include the actual file binary, but rather a link to the actual file. Following this link will yield the actual file.</li>\n  <li>An example response parameter for a link to a file is <b>customs_clearance_document_link</b>.</li>\n</ul>\n",
+        "responses": {
+          "200": {
+            "description": "get a existing order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/order_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/standard_error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Canceling an order",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "id of an existing order."
+          }
+        ],
+        "operationId": "cancelOrder",
+        "description": "This will cancel the order if possible.\n",
+        "responses": {
+          "200": {
+            "description": "canceled successfully."
+          }
+        }
+      }
+    },
+    "/orders/{id}/pickup_availabilities": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order - Pickup Availabilities",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "id of an existing order"
+          }
+        ],
+        "operationId": "getAvailabilities",
+        "description": "This will return an array of availabilities which specify specific dates, times and durations in the near future where a pickup can be scheduled for the specified order\n",
+        "responses": {
+          "200": {
+            "description": "get pickup availabilities for specified order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/pickup_availabilties"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/standard_error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}/schedule_pickups": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order - Scheduled Pickups",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "id of an existing order"
+          }
+        ],
+        "operationId": "createScheduledPickup",
+        "description": "This will create a scheudled pickup for the specified order and attempt to schedule the pickup with the shipping company of the order, if this fails an appropriate error message will be returned and the Stream team will be notified of the failure\n",
+        "responses": {
+          "201": {
+            "description": "item created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/scheduled_pickup"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/standard_error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/scheduled_pickup_request"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}/tracking": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order - Tracking",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "id of an existing order"
+          }
+        ],
+        "operationId": "getTracking",
+        "description": "This will return any tracking events from the shipping company for the specified order",
+        "responses": {
+          "200": {
+            "description": "get tracking events for specified order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tracking"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/standard_error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}/waybills": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order - Waybills",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "id of an existing order"
+          }
+        ],
+        "operationId": "generateWaybill",
+        "description": "This will generate a waybill for the specified order",
+        "responses": {
+          "200": {
+            "description": "generate waybill for specified order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tracking"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/standard_error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/purpose_of_shipments": {
+      "get": {
+        "summary": "Purpose of Shipment (or IncoTerms)",
+        "tags": [
+          "Static Data"
+        ],
+        "responses": {
+          "200": {
+            "description": "fetch all the 'purpose_of_shipment' items. Also known as the IncoTerms",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/purpose_of_shipment"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quotes": {
+      "post": {
+        "tags": [
+          "Quote"
+        ],
+        "summary": "Quote",
+        "operationId": "createQuote",
+        "description": "Create a quote on the system, which will then have several estimates associated to it on which an order can be placed.\n<br> <br> These are called estimatesas the final costs will be determined when the underlying provider measures the packages and provides a final official billable weight.\n",
+        "responses": {
+          "201": {
+            "description": "item created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/quote_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/standard_error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/quote_request"
+              }
+            }
+          },
+          "description": "Inventory item to add"
+        }
+      }
+    },
+    "/quotes/{id}": {
+      "get": {
+        "tags": [
+          "Quote"
+        ],
+        "summary": "Quote",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "id of an existing quote"
+          }
+        ],
+        "operationId": "getQuote",
+        "description": "This will return the available pricing options (estimates) for the quote details supplied <br> <br> The transit times are an estimate from the service providers and from historical shipments. The values returned are in days.\n",
+        "responses": {
+          "200": {
+            "description": "get a quote that was created recently",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/quote_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/standard_error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system_configs/export_permit_origin_country_ids": {
+      "get": {
+        "summary": "Export Permit Origin Country Ids",
+        "tags": [
+          "Static Data"
+        ],
+        "responses": {
+          "200": {
+            "description": "This will fetch ids (as returned by the /countries endpoint) of all the countries that require an export permit. Export permits are required for orders leaving the specified countries before it is possible to generate waybill.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/export_permit_origin_country_id"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "accounting_dimension": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "description": {
+            "type": "string",
+            "example": "Additional Charges"
+          }
+        }
+      },
+      "address": {
+        "type": "object",
+        "required": [
+          "name",
+          "address_1",
+          "city",
+          "province",
+          "postal_code",
+          "country_id",
+          "email",
+          "phone"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 35,
+            "example": "My House"
+          },
+          "company": {
+            "type": "string",
+            "maxLength": 35,
+            "example": "Company Name"
+          },
+          "address_1": {
+            "type": "string",
+            "maxLength": 34,
+            "example": "5 Open Street"
+          },
+          "address_2": {
+            "type": "string",
+            "maxLength": 34,
+            "example": "Melrose Arch"
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 20,
+            "example": "Johannesburg"
+          },
+          "province": {
+            "type": "string",
+            "maxLength": 35,
+            "example": "Gauteng"
+          },
+          "postal_code": {
+            "type": "string",
+            "example": "1610"
+          },
+          "import_code": {
+            "type": "string",
+            "example": "GB000000000000"
+          },
+          "export_code": {
+            "type": "string",
+            "example": "GB000000000000"
+          },
+          "country_id": {
+            "type": "integer",
+            "example": 226
+          },
+          "email": {
+            "type": "string",
+            "example": "example@stream.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+27825547358"
+          }
+        }
+      },
+      "auth_response": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzadfaskdjLKSAJSLdkoIASjdlaksjoj"
+          }
+        }
+      },
+      "auth": {
+        "type": "object",
+        "properties": {
+          "api_user": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "example": "email@email.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "p@55w0rd"
+              }
+            }
+          }
+        }
+      },
+      "broker_address": {
+        "type": "object",
+        "required": [
+          "vat_number",
+          "import_code",
+          "address_1",
+          "city",
+          "province",
+          "postal_code",
+          "country_id",
+          "email",
+          "phone"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My House"
+          },
+          "company": {
+            "type": "string",
+            "example": "Company Name"
+          },
+          "address_1": {
+            "type": "string",
+            "example": "5 Open Street"
+          },
+          "address_2": {
+            "type": "string",
+            "example": "Melrose Arch"
+          },
+          "city": {
+            "type": "string",
+            "example": "Johannesburg"
+          },
+          "province": {
+            "type": "string",
+            "example": "Gauteng"
+          },
+          "postal_code": {
+            "type": "string",
+            "example": "1610"
+          },
+          "country_id": {
+            "type": "integer",
+            "example": 226
+          },
+          "email": {
+            "type": "string",
+            "example": "example@stream.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+27825547358"
+          },
+          "vat_number": {
+            "type": "string",
+            "example": "BF4887450"
+          },
+          "import_code": {
+            "type": "string",
+            "example": "S1A485"
+          }
+        }
+      },
+      "country": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Serbia"
+          },
+          "iso_code_2": {
+            "type": "string",
+            "example": "RS"
+          }
+        }
+      },
+      "currency": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "GBP"
+          },
+          "name": {
+            "type": "string",
+            "example": "Pound"
+          }
+        }
+      },
+      "dangerous_goods": {
+        "required": [
+          "un_code"
+        ],
+        "properties": {
+          "un_code": {
+            "type": "string",
+            "example": "UN3090"
+          }
+        }
+      },
+      "destination_address": {
+        "type": "object",
+        "required": [
+          "name",
+          "address_1",
+          "city",
+          "province",
+          "postal_code",
+          "country_id",
+          "email",
+          "phone"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My House"
+          },
+          "company": {
+            "type": "string",
+            "example": "Company Name"
+          },
+          "address_1": {
+            "type": "string",
+            "example": "Abbey Road"
+          },
+          "address_2": {
+            "type": "string",
+            "example": "Putney"
+          },
+          "city": {
+            "type": "string",
+            "example": "London"
+          },
+          "province": {
+            "type": "string",
+            "example": "London"
+          },
+          "postal_code": {
+            "type": "string",
+            "example": "SW1A 2AA"
+          },
+          "import_code": {
+            "type": "string",
+            "example": "GB000000000000"
+          },
+          "country_id": {
+            "type": "integer",
+            "example": 70
+          },
+          "email": {
+            "type": "string",
+            "example": "example@stream.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+27825547358"
+          }
+        }
+      },
+      "estimate": {
+        "type": "object",
+        "properties": {
+          "shipping_company": {
+            "type": "string",
+            "example": "FedEx USA"
+          },
+          "shipping_service": {
+            "type": "string",
+            "example": "Express Priority"
+          },
+          "estimate_id": {
+            "type": "integer",
+            "example": 55788
+          },
+          "quote_expired": {
+            "type": "boolean",
+            "example": false
+          },
+          "line_items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/line_item"
+            }
+          },
+          "transit_detail": {
+            "type": "object",
+            "properties": {
+              "min_transit_time": {
+                "type": "integer",
+                "format": "in terms of Days, i.e 1 Day",
+                "example": 1
+              },
+              "max_transit_time": {
+                "type": "integer",
+                "format": "in terms of Days, i.e 5 Day",
+                "example": 5
+              },
+              "transit_time_note": {
+                "type": "string",
+                "example": "clearance delay possible"
+              }
+            }
+          },
+          "billable_weight": {
+            "type": "object",
+            "properties": {
+              "metric": {
+                "type": "object",
+                "properties": {
+                  "packages": {
+                    "type": "integer",
+                    "example": "2,"
+                  },
+                  "mass_unit": {
+                    "type": "string",
+                    "example": "kg"
+                  },
+                  "distance_unit": {
+                    "type": "string",
+                    "example": "cm"
+                  },
+                  "volumetric_weight": {
+                    "type": "number",
+                    "example": 50
+                  },
+                  "weight": {
+                    "type": "number",
+                    "example": 100
+                  },
+                  "billable_weight": {
+                    "type": "number",
+                    "example": 100
+                  }
+                }
+              },
+              "imperial": {
+                "type": "object",
+                "properties": {
+                  "packages": {
+                    "type": "integer",
+                    "example": 2
+                  },
+                  "mass_unit": {
+                    "type": "string",
+                    "example": "lb"
+                  },
+                  "distance_unit": {
+                    "type": "string",
+                    "example": "inches"
+                  },
+                  "volumetric_weight": {
+                    "type": "number",
+                    "example": 110.231
+                  },
+                  "weight": {
+                    "type": "number",
+                    "example": 220.462
+                  },
+                  "billable_weight": {
+                    "type": "number",
+                    "example": 220.462
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "export_permit_origin_country_id": {
+        "type": "integer",
+        "example": 254
+      },
+      "hs_code": {
+        "type": "object",
+        "required": [
+          "code",
+          "cost",
+          "description",
+          "quantity",
+          "weight",
+          "country_id"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": 100322
+          },
+          "cost": {
+            "type": "string",
+            "example": 100
+          },
+          "description": {
+            "type": "string",
+            "example": "networking equipment"
+          },
+          "quantity": {
+            "type": "integer",
+            "example": 5
+          },
+          "weight": {
+            "type": "number",
+            "example": 1.1
+          },
+          "eccn": {
+            "type": "string",
+            "format": "5 digit number",
+            "example": 12345
+          },
+          "country_id": {
+            "type": "integer",
+            "format": "(country of origin of goods)",
+            "example": 5
+          }
+        }
+      },
+      "importer_of_record_address": {
+        "type": "object",
+        "required": [
+          "vat_number",
+          "import_code",
+          "address_1",
+          "city",
+          "province",
+          "postal_code",
+          "country_id",
+          "email",
+          "phone"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My House"
+          },
+          "company": {
+            "type": "string",
+            "example": "Company Name"
+          },
+          "address_1": {
+            "type": "string",
+            "example": "5 Open Street"
+          },
+          "address_2": {
+            "type": "string",
+            "example": "Melrose Arch"
+          },
+          "city": {
+            "type": "string",
+            "example": "Johannesburg"
+          },
+          "province": {
+            "type": "string",
+            "example": "Gauteng"
+          },
+          "postal_code": {
+            "type": "string",
+            "example": "1610"
+          },
+          "country_id": {
+            "type": "integer",
+            "example": 226
+          },
+          "email": {
+            "type": "string",
+            "example": "example@stream.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+27825547358"
+          },
+          "vat_number": {
+            "type": "string",
+            "example": "BF4887450"
+          },
+          "import_code": {
+            "type": "string",
+            "example": "S1A485"
+          }
+        }
+      },
+      "line_item_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "description": {
+            "type": "string",
+            "example": "Shipment Protection Fee"
+          },
+          "accounting_dimension": {
+            "type": "object",
+            "items": null,
+            "$ref": "#/components/schemas/accounting_dimension"
+          }
+        }
+      },
+      "line_item": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Fuel Surcharge"
+          },
+          "cost": {
+            "type": "number",
+            "example": 469.95
+          },
+          "invoice_section": {
+            "type": "string",
+            "example": "Express Rate Fees"
+          },
+          "currency_id": {
+            "type": "string",
+            "example": "USD"
+          }
+        }
+      },
+      "order_response": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 1
+              },
+              "purpose_of_shipment_id": {
+                "type": "integer",
+                "example": 8
+              },
+              "pickup_date": {
+                "type": "string",
+                "example": "20-01-2020"
+              },
+              "status": {
+                "type": "string",
+                "example": "order_received"
+              },
+              "waybill": {
+                "type": "string",
+                "example": "123456789"
+              },
+              "tracking_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/tracking"
+              },
+              "reference_number": {
+                "type": "string",
+                "example": "Stream0014"
+              },
+              "customer_reference": {
+                "type": "string",
+                "example": "Ref0000"
+              },
+              "measured_weight": {
+                "type": "integer",
+                "example": 230
+              },
+              "description_of_contents": {
+                "type": "string",
+                "example": "Networking Equipment"
+              },
+              "date_delivered": {
+                "type": "string",
+                "example": "22-02-2020"
+              },
+              "internal_transaction_number": {
+                "type": "string",
+                "example": "235688794235684"
+              },
+              "quote_id": {
+                "type": "integer",
+                "example": 1
+              },
+              "commercial_invoice_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/commercial_invoice"
+              },
+              "packaging_list_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/packaging_list"
+              },
+              "waybill_document_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/waybill_document"
+              },
+              "customs_clearance_document_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/customs_clearance_document"
+              },
+              "materials_safety_data_sheet_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/materials_safety_data_sheet"
+              },
+              "battery_declaration_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/battery_declaration"
+              },
+              "invoice_document_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/invoice_document"
+              },
+              "proof_of_delivery_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/proof_of_delivery"
+              },
+              "draft_bill_of_lading_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/draft_bill_of_lading"
+              },
+              "final_bill_of_lading_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/final_bill_of_lading"
+              },
+              "shippers_letter_of_instruction_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/shippers_letter_of_instruction"
+              },
+              "eei_request_document_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/eei_request_document"
+              },
+              "export_permit_link": {
+                "type": "string",
+                "example": "wwww.streamfiles.com/order123/export_permit"
+              },
+              "invoice_number": {
+                "type": "string",
+                "example": "123456"
+              },
+              "eei_eligible": {
+                "type": "boolean",
+                "example": true
+              },
+              "ccd_status": {
+                "type": "string",
+                "example": "not_required"
+              },
+              "origin_address": {
+                "type": "object",
+                "items": null,
+                "$ref": "#/components/schemas/address"
+              },
+              "destination_address": {
+                "type": "object",
+                "item": null,
+                "$ref": "#/components/schemas/address"
+              },
+              "broker_address": {
+                "type": "object",
+                "item": null,
+                "$ref": "#/components/schemas/broker_address"
+              },
+              "importer_of_record_address": {
+                "type": "object",
+                "item": null,
+                "$ref": "#/components/schemas/importer_of_record_address"
+              },
+              "assigned_admin": {
+                "type": "string",
+                "example": "admin@vatitstream.com"
+              },
+              "invoice_data": {
+                "type": "object",
+                "item": null,
+                "$ref": "#/components/schemas/estimate"
+              }
+            }
+          }
+        }
+      },
+      "order_status": {
+        "type": "object",
+        "required": [
+          "id",
+          "description",
+          "value"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "description": {
+            "type": "string",
+            "example": "In Transit"
+          },
+          "value": {
+            "type": "string",
+            "example": "in_transit"
+          }
+        }
+      },
+      "order": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "object",
+            "required": [
+              "origin_address",
+              "destination_address",
+              "pickup_instructions",
+              "purpose_of_shipment_id",
+              "quote_estimate_id",
+              "customer_reference",
+              "description_of_contents"
+            ],
+            "properties": {
+              "origin_address": {
+                "type": "object",
+                "items": null,
+                "$ref": "#/components/schemas/origin_address"
+              },
+              "destination_address": {
+                "type": "object",
+                "items": null,
+                "$ref": "#/components/schemas/destination_address"
+              },
+              "pickup_instructions": {
+                "type": "string",
+                "example": "Additional pickup information"
+              },
+              "purpose_of_shipment_id": {
+                "type": "integer",
+                "example": 8
+              },
+              "quote_estimate_id": {
+                "type": "integer",
+                "example": 5
+              },
+              "customer_reference": {
+                "type": "string",
+                "example": "Ref0000"
+              },
+              "description_of_contents": {
+                "type": "string",
+                "example": "Networking Equipment"
+              },
+              "hs_codes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/hs_code"
+                },
+                "example": [
+                  {
+                    "code": 100322,
+                    "cost": 100,
+                    "description": "networking equipment",
+                    "quantity": 5,
+                    "weight": 1.1,
+                    "eccn": 12345,
+                    "country_id": 5
+                  }
+                ]
+              },
+              "broker_address": {
+                "type": "object",
+                "items": null,
+                "$ref": "#/components/schemas/broker_address"
+              },
+              "importer_of_record_address": {
+                "type": "object",
+                "items": null,
+                "$ref": "#/components/schemas/importer_of_record_address"
+              }
+            }
+          }
+        }
+      },
+      "origin_address": {
+        "type": "object",
+        "required": [
+          "name",
+          "address_1",
+          "city",
+          "province",
+          "postal_code",
+          "country_id",
+          "email",
+          "phone"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My House"
+          },
+          "company": {
+            "type": "string",
+            "example": "Company Name"
+          },
+          "address_1": {
+            "type": "string",
+            "example": "5 Open Street"
+          },
+          "address_2": {
+            "type": "string",
+            "example": "Melrose Arch"
+          },
+          "city": {
+            "type": "string",
+            "example": "Johannesburg"
+          },
+          "province": {
+            "type": "string",
+            "example": "Gauteng"
+          },
+          "postal_code": {
+            "type": "string",
+            "example": "2196"
+          },
+          "country_id": {
+            "type": "integer",
+            "example": 226
+          },
+          "export_code": {
+            "type": "string",
+            "example": "ZA000000000000"
+          },
+          "email": {
+            "type": "string",
+            "example": "example@stream.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+27825547358"
+          }
+        }
+      },
+      "package": {
+        "type": "object",
+        "required": [
+          "weight",
+          "width",
+          "height",
+          "length"
+        ],
+        "properties": {
+          "weight": {
+            "type": "number",
+            "example": 5.5
+          },
+          "width": {
+            "type": "number",
+            "example": 5.5
+          },
+          "height": {
+            "type": "number",
+            "example": 5.5
+          },
+          "length": {
+            "type": "number",
+            "example": 5.5
+          }
+        }
+      },
+      "pickup_availability": {
+        "type": "object",
+        "properties": {
+          "pickup_date": {
+            "type": "string",
+            "example": "20-01-2020"
+          },
+          "cut_off_time": {
+            "type": "string",
+            "example": "16:00.00"
+          },
+          "minimum_access_duration_minutes": {
+            "type": "integer",
+            "example": 180
+          },
+          "earliest_pickup_time": {
+            "type": "string",
+            "example": "12:00.00"
+          },
+          "time_zone_id": {
+            "type": "string",
+            "example": "America/Chicago"
+          }
+        }
+      },
+      "pickup_availabilties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/pickup_availability"
+        }
+      },
+      "purpose_of_shipment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "description": {
+            "type": "string",
+            "example": "Cost Insurance & Freight"
+          },
+          "code": {
+            "type": "string",
+            "example": "CIF"
+          }
+        }
+      },
+      "quote_request": {
+        "type": "object",
+        "required": [
+          "origin_country_id",
+          "destination_country_id",
+          "is_document",
+          "is_stackable",
+          "is_liftgate_required",
+          "purpose_of_shipment_id",
+          "is_shipment_protection_required",
+          "value_of_goods",
+          "value_of_goods_currency_id",
+          "mass_unit",
+          "distance_unit",
+          "packages"
+        ],
+        "properties": {
+          "origin_address": {
+            "type": "object",
+            "items": null,
+            "$ref": "#/components/schemas/origin_address"
+          },
+          "destination_address": {
+            "type": "object",
+            "items": null,
+            "$ref": "#/components/schemas/destination_address"
+          },
+          "value_of_goods": {
+            "type": "string",
+            "format": "Money",
+            "example": "600.00"
+          },
+          "value_of_goods_currency_id": {
+            "type": "string",
+            "format": "3 Digit Currency Code",
+            "example": "ZAR"
+          },
+          "purpose_of_shipment_id": {
+            "type": "integer",
+            "example": 8
+          },
+          "is_document": {
+            "type": "boolean",
+            "example": true
+          },
+          "is_stackable": {
+            "type": "boolean",
+            "example": true
+          },
+          "is_liftgate_required": {
+            "type": "boolean",
+            "example": true
+          },
+          "is_shipment_protection_required": {
+            "type": "boolean",
+            "example": true
+          },
+          "distance_unit": {
+            "type": "string",
+            "format": "cm/in",
+            "example": "cm"
+          },
+          "mass_unit": {
+            "type": "string",
+            "format": "kg/lb",
+            "example": "kg"
+          },
+          "packages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/package"
+            }
+          }
+        }
+      },
+      "quote_response": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "estimates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/estimate"
+            }
+          }
+        }
+      },
+      "rate_limit_error": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "error": {
+            "type": "string",
+            "example": "Too many requests (20/20 in 60 seconds)"
+          }
+        }
+      },
+      "scheduled_pickup_request": {
+        "type": "object",
+        "properties": {
+          "scheduled_pickup": {
+            "type": "object",
+            "properties": {
+              "time_from": {
+                "type": "string",
+                "example": "12:00"
+              },
+              "time_to": {
+                "type": "string",
+                "example": "16:00.00"
+              },
+              "scheduled_date": {
+                "type": "string",
+                "example": "14-01-2020"
+              }
+            }
+          }
+        }
+      },
+      "scheduled_pickup": {
+        "type": "object",
+        "properties": {
+          "scheduled_pickup": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 14
+              },
+              "time_from": {
+                "type": "string",
+                "example": "12:00"
+              },
+              "time_to": {
+                "type": "string",
+                "example": "16:00.00"
+              },
+              "scheduled_date": {
+                "type": "string",
+                "example": "14-01-2020"
+              },
+              "confirmation_number": {
+                "type": "string",
+                "example": "DSD5659S"
+              },
+              "status": {
+                "type": "string",
+                "example": "system_to_schedule"
+              },
+              "freight_confirmation_number": {
+                "type": "string",
+                "example": "SFEWF65"
+              },
+              "error_message": {
+                "type": "string",
+                "example": "Invalid time requested"
+              }
+            }
+          }
+        }
+      },
+      "shipment_event": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "description": {
+            "type": "string",
+            "example": "Shipment picked up"
+          },
+          "date_time": {
+            "type": "string",
+            "example": "2019-12-20T16:40:03.000Z"
+          },
+          "location": {
+            "type": "string",
+            "example": "America/Chicago"
+          }
+        }
+      },
+      "standard_error": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "error": {
+            "type": "string",
+            "example": "Invalid field"
+          }
+        }
+      },
+      "tracking": {
+        "type": "object",
+        "properties": {
+          "shipment_events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/shipment_event"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

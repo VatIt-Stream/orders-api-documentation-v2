@@ -1,0 +1,27 @@
+post:
+  tags:
+    - Order
+  summary: 'Order - Waybills'
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: integer
+      required: true
+      description: id of an existing order
+  operationId: generateWaybill
+  description:
+    This will generate a waybill for the specified order
+  responses:
+    '200':
+      description: generate waybill for specified order
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/tracking'
+    '400':
+      description: 'invalid input, object invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/standard_error'
