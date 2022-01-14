@@ -6,8 +6,16 @@ servers:
     url: 'https://orders-api-production.vatit-stream.com/client_api/v2/'
 info:
   description: |
+    <i> Please note that the v2 endpoint is in beta and is actively changing. </i>
     <p> <b> Find our version 1 docs here <a href="https://orders-api-v2-docs.vatit-stream.com/swagger-ui/#/"> https://orders-api-docs.vatit-stream.com/swagger-ui/#/ </a> </b> </p>
-    <b>Version 2.0 (2021-12-23) - API Documentation for Stream</b>
+    <b>Update 2.1 (2022-01-14) - Separate Waybills Endpoint</b>
+    <ul>
+      <li>Improved error messages from service providers.
+      <li>Placing an order and generating a waybill have been separated into 2 separate endpoints.
+      <li>Place an order by posting to <i>/orders</i> endpoint.
+      <li>Generate waybill with a post to <i>/orders/{order_id}/waybills</i>. </i>
+    </ul>
+    <b>Update 2.0 (2021-12-23) - API Documentation for Stream</b>
     <ul>
       <li>Added the ability to send in full address details at the quoting stage.
     </ul>
@@ -323,6 +331,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/standard_error'
+  '/orders/{id}/waybills':
+    post:
+      tags:
+        - Order
+      summary: Order - Waybills
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: id of an existing order
+      operationId: generateWaybill
+      description: This will generate a waybill for the specified order
+      responses:
+        '200':
+          description: generate waybill for specified order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tracking'
+        '400':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standard_error'
   /purpose_of_shipments:
     get:
       summary: Purpose of Shipment (or IncoTerms)
@@ -605,7 +640,7 @@ components:
           example: GB000000000000
         country_id:
           type: integer
-          example: 212
+          example: 70
         email:
           type: string
           example: example@stream.com
