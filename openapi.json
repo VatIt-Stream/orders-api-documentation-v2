@@ -496,11 +496,11 @@
         "description": "This will generate a waybill for the specified order",
         "responses": {
           "200": {
-            "description": "generate waybill for specified order",
+            "description": "generates a waybill for specified order",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/tracking"
+                  "$ref": "#/components/schemas/order_response"
                 }
               }
             }
