@@ -1240,9 +1240,6 @@ components:
             confirmation_number:
               type: string
               example: DSD5659S
-            status:
-              type: string
-              example: system_to_schedule
             freight_confirmation_number:
               type: string
               example: SFEWF65
