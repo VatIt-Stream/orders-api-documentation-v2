@@ -347,11 +347,11 @@ paths:
       description: This will generate a waybill for the specified order
       responses:
         '200':
-          description: generate waybill for specified order
+          description: generates a waybill for specified order
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/tracking'
+                $ref: '#/components/schemas/order_response'
         '400':
           description: 'invalid input, object invalid'
           content:
@@ -1240,9 +1240,6 @@ components:
             confirmation_number:
               type: string
               example: DSD5659S
-            status:
-              type: string
-              example: system_to_schedule
             freight_confirmation_number:
               type: string
               example: SFEWF65
