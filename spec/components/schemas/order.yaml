@@ -54,4 +54,8 @@ properties:
         type: object
         items: null
         $ref: '#/components/schemas/importer_of_record_address'
+      clearance_details:
+        type: object
+        items:
+        $ref: "#/components/schemas/clearance_details"
 

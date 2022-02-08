@@ -24,6 +24,7 @@ properties:
       reference_number:
         type: string
         example: "Stream0014"
+
       customer_reference:
         type: string
         example: "Ref0000"

@@ -1,4 +1,4 @@
-specFileName: /Users/toma/Dev/api-order-management/open-api.yml
+specFileName: /Users/gavinmorris/StreamProjects/orders-api-documentation-v2/open-api.yml
 apiTitle: Stream Orders Api
 splitSpec: true
 codeSamples: false

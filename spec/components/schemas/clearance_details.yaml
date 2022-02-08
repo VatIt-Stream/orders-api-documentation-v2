@@ -1,0 +1,23 @@
+type: object
+required:
+  - reason_for_shipment_id
+  - invoice_number
+  - purchase_order_number
+  - commercial_invoice_placeholder_text
+properties:
+  reason_for_shipment_id:
+    type: integer
+    enum: [0, 1, 2]
+    example: 0
+  invoice_number:
+    type: string
+    maxLength: 35
+    example: REF0001
+  purchase_order_number:
+    type: string
+    maxLength: 34
+    example: This is a purchase order number
+  commercial_invoice_placeholder_text:
+    type: string
+    maxLength: 34
+    example: This is commercial invoice placeholder text 
