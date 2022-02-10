@@ -1,7 +1,5 @@
 openapi: 3.0.0
 servers:
-  - description: Localhost
-    url: "http://localhost:4000/client_api/v2/"
   - description: SwaggerHub API Auto Mocking
     url: "https://stream-orders-api-sandbox.herokuapp.com/client_api/v2/"
   - description: Production Endpoint
