@@ -51,3 +51,7 @@ properties:
   phone:
     type: string
     example: '+27825547358'
+  classification:
+    type: string
+    enum: ['residential', 'business']
+    example: 'residential'
