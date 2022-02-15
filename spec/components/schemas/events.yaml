@@ -1,0 +1,2 @@
+type: string
+enum: ['order.updated.status', 'order.updated.waybill']

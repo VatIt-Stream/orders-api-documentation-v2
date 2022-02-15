@@ -1,0 +1,80 @@
+get:
+  tags:
+    - Webhook
+  summary: Webhook
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: string
+      required: true
+      description: id or reference_number of an existing webhook
+  operationId: showWebhook
+  description: >
+    Retrieve a specific webhook.
+  responses:
+    '200':
+      description: item created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/webhook_response'
+    '404':
+      description: 'item not found'
+
+patch:
+  tags:
+    - Webhook
+  summary: Webhook
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: string
+      required: true
+      description: id or reference_number of an existing webhook
+  operationId: updateWebhook
+  description: >
+    Update a webhook. 
+    You can update the target_url, the events and the status.
+  responses:
+    '200':
+      description: item updated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/webhook_response'
+    '404':
+      description: 'item not found'
+    '422':
+      description: 'invalid input, object invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/standard_error'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/webhook_request'
+
+delete:
+  tags:
+    - Webhook
+  summary: Webhook
+  parameters:
+    - in: path
+      name: id
+      schema:
+        type: string
+      required: true
+      description: id or reference_number of an existing webhook
+  operationId: destroyWebhook
+  description: >
+    Destroy a webhook. 
+  responses:
+    '200':
+      description: item deleted
+    '404':
+      description: 'item not found'
+          

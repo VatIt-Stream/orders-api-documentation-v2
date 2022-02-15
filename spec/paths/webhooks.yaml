@@ -1,0 +1,30 @@
+post:
+  tags:
+    - Webhook
+  summary: Webhook
+  operationId: createWebhook
+  description: >
+    Creates a webhook. 
+    You can define which events you would like to be notified for.
+    Available events can be found in the events schema below.
+  responses:
+    '201':
+      description: item created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/webhook_response'
+    '422':
+      description: 'invalid input, object invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/standard_error'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/webhook_request'
+
+
+
