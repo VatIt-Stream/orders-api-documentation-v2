@@ -1,14 +1,16 @@
 type: object
-required:
-  - target_url
-  - events
-  - company_id
 properties:
-  target_url:
-    type: string
-    example: "https://www.test.com/api/webhooks"
-  events:
-    type: array
-    items:
-      $ref: '#/components/schemas/events'
+  webhook:
+    required:
+      - target_url
+      - events
+      - company_id
+    properties:
+      target_url:
+        type: string
+        example: "https://www.test.com/api/webhooks"
+      events:
+        type: array
+        items:
+          $ref: '#/components/schemas/events'
 

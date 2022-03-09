@@ -1,16 +1,18 @@
 type: object
 properties:
-  target_url:
-    type: string
-    example: "https://www.test.com/api/webhooks"
-  events:
-    type: array
-    items:
-      $ref: '#/components/schemas/events'
-  status: 
-    type: string
-    example: "active"
-  token: 
-    type: string
-    example: "bdfjkabdsdfjklasdgjklba"
+  webhook:
+    properties:
+      target_url:
+        type: string
+        example: "https://www.test.com/api/webhooks"
+      events:
+        type: array
+        items:
+          $ref: '#/components/schemas/events'
+      status: 
+        type: string
+        example: "active"
+      token: 
+        type: string
+        example: "bdfjkabdsdfjklasdgjklba"
 
