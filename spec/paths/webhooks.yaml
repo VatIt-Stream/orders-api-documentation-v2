@@ -1,3 +1,8 @@
+
+description: >
+    Creates a webhook. 
+    You can define which events you would like to be notified for.
+    Available events can be found in the events schema below.
 post:
   tags:
     - Webhook

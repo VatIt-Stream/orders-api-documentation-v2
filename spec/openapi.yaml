@@ -49,5 +49,9 @@ tags:
       </ul>
   - name: Static Data
     description: Used for lookup of information
+  - name: Webhook
+    description:  >-
+      Used to subscribe to system events. When an event of the chosen type occurs Stream will make a post request with the event information to the target_url you have provided.
+      The schema of the event payload can be seen under webhook_event
 security:
   - bearerAuth: []

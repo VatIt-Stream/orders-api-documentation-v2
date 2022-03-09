@@ -1,0 +1,23 @@
+type: object
+properties:
+  object_type:
+    type: string
+    example: order
+  object_idcompany:
+    type: integer
+    example: 1234
+  event_Type:
+    type: string
+    example: order.updated.status
+  original_value:
+    type: string
+    example: in_transit
+  updated_value:
+    type: string
+    example: delivered
+  updated_at_utc:
+    type: string
+    example: '2022-02-28T11:36:23.388Z'
+  token:
+    type: string
+    example: 'abcde123456'
