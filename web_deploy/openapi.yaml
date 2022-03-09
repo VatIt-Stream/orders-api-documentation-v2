@@ -1,7 +1,5 @@
 openapi: 3.0.0
 servers:
-  - description: Localhost
-    url: 'http://localhost:4000/client_api/v2/'
   - description: SwaggerHub API Auto Mocking
     url: 'https://stream-orders-api-sandbox.herokuapp.com/client_api/v2/'
   - description: Production Endpoint
@@ -10,6 +8,11 @@ info:
   description: |
     <i> Please note that the v2 endpoint is in beta and is actively changing. </i>
     <p> <b> Find our version 1 docs here <a href="https://orders-api-v2-docs.vatit-stream.com/swagger-ui/#/"> https://orders-api-docs.vatit-stream.com/swagger-ui/#/ </a> </b> </p>
+    <b>Update 2.2 (2022-01-14) - Updated Quote and Order Endpoints ; </b>
+    <ul>
+      <li>Added classification to origin and destination address on quote and order
+      <li>Added clearance details to order
+    </ul>
     <b>Update 2.1 (2022-01-14) - Separate Waybills Endpoint</b>
     <ul>
       <li>Improved error messages from service providers.
@@ -444,6 +447,109 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/export_permit_origin_country_id'
+  /webhooks:
+    post:
+      tags:
+        - Webhook
+      summary: Webhook
+      operationId: createWebhook
+      description: |
+        Creates a webhook.  You can define which events you would like to be notified for. Available events can be found in the events schema below.
+      responses:
+        '201':
+          description: item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook_response'
+        '422':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standard_error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webhook_request'
+  '/webhooks/{id}':
+    get:
+      tags:
+        - Webhook
+      summary: Webhook
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id or reference_number of an existing webhook
+      operationId: showWebhook
+      description: |
+        Retrieve a specific webhook.
+      responses:
+        '200':
+          description: item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook_response'
+        '404':
+          description: item not found
+    patch:
+      tags:
+        - Webhook
+      summary: Webhook
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id or reference_number of an existing webhook
+      operationId: updateWebhook
+      description: |
+        Update a webhook.  You can update the target_url, the events and the status.
+      responses:
+        '200':
+          description: item updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook_response'
+        '404':
+          description: item not found
+        '422':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standard_error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webhook_request'
+    delete:
+      tags:
+        - Webhook
+      summary: Webhook
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id or reference_number of an existing webhook
+      operationId: destroyWebhook
+      description: |
+        Destroy a webhook. 
+      responses:
+        '200':
+          description: item deleted
+        '404':
+          description: item not found
 components:
   schemas:
     accounting_dimension:
@@ -509,6 +615,12 @@ components:
         phone:
           type: string
           example: '+27825547358'
+        classification:
+          type: string
+          enum:
+            - residential
+            - business
+          example: residential
     auth_response:
       type: object
       properties:
@@ -576,6 +688,33 @@ components:
         import_code:
           type: string
           example: S1A485
+    clearance_details:
+      type: object
+      required:
+        - reason_for_shipment_id
+        - invoice_number
+        - purchase_order_number
+        - commercial_invoice_placeholder_text
+      properties:
+        reason_for_shipment_id:
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+          example: 0
+        invoice_number:
+          type: string
+          maxLength: 35
+          example: REF0001
+        purchase_order_number:
+          type: string
+          maxLength: 34
+          example: This is a purchase order number
+        commercial_invoice_placeholder_text:
+          type: string
+          maxLength: 34
+          example: This is commercial invoice placeholder text
     country:
       type: object
       properties:
@@ -649,6 +788,12 @@ components:
         phone:
           type: string
           example: '+27825547358'
+        classification:
+          type: string
+          enum:
+            - residential
+            - business
+          example: residential
     estimate:
       type: object
       properties:
@@ -727,6 +872,11 @@ components:
                 billable_weight:
                   type: number
                   example: 220.462
+    events:
+      type: string
+      enum:
+        - order.updated.status
+        - order.updated.waybill
     export_permit_origin_country_id:
       type: integer
       example: 254
@@ -1029,6 +1179,10 @@ components:
               type: object
               items: null
               $ref: '#/components/schemas/importer_of_record_address'
+            clearance_details:
+              type: object
+              items: null
+              $ref: '#/components/schemas/clearance_details'
     origin_address:
       type: object
       required:
@@ -1074,6 +1228,12 @@ components:
         phone:
           type: string
           example: '+27825547358'
+        classification:
+          type: string
+          enum:
+            - residential
+            - business
+          example: residential
     package:
       type: object
       required:
@@ -1279,6 +1439,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/shipment_event'
+    webhook_request:
+      type: object
+      required:
+        - target_url
+        - events
+        - company_id
+      properties:
+        target_url:
+          type: string
+          example: 'https://www.test.com/api/webhooks'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/events'
+    webhook_response:
+      type: object
+      properties:
+        target_url:
+          type: string
+          example: 'https://www.test.com/api/webhooks'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/events'
+        status:
+          type: string
+          example: active
+        token:
+          type: string
+          example: bdfjkabdsdfjklasdgjklba
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
