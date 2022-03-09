@@ -42,6 +42,8 @@ tags:
       </ul>
   - name: Static Data
     description: Used for lookup of information
+  - name: Webhook
+    description: Used to subscribe to system events. When an event of the chosen type occurs Stream will make a post request with the event information to the target_url you have provided. The schema of the event payload can be seen under webhook_event
 security:
   - bearerAuth: []
 paths:
@@ -448,6 +450,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/export_permit_origin_country_id'
   /webhooks:
+    description: |
+      Creates a webhook.  You can define which events you would like to be notified for. Available events can be found in the events schema below.
     post:
       tags:
         - Webhook
@@ -1439,6 +1443,30 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/shipment_event'
+    webhook_event:
+      type: object
+      properties:
+        object_type:
+          type: string
+          example: order
+        object_idcompany:
+          type: integer
+          example: 1234
+        event_Type:
+          type: string
+          example: order.updated.status
+        original_value:
+          type: string
+          example: in_transit
+        updated_value:
+          type: string
+          example: delivered
+        updated_at_utc:
+          type: string
+          example: '2022-02-28T11:36:23.388Z'
+        token:
+          type: string
+          example: abcde123456
     webhook_request:
       type: object
       required:
