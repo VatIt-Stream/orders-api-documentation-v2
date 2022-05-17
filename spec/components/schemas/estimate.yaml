@@ -65,7 +65,7 @@ properties:
             example: lb
           distance_unit:
             type: string
-            example: inches
+            example: inch
           volumetric_weight:
             type: number
             example: 110.231

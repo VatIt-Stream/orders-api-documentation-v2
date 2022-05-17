@@ -548,7 +548,7 @@ paths:
           description: id or reference_number of an existing webhook
       operationId: destroyWebhook
       description: |
-        Destroy a webhook. 
+        Destroy a webhook.
       responses:
         '200':
           description: item deleted
@@ -866,7 +866,7 @@ components:
                   example: lb
                 distance_unit:
                   type: string
-                  example: inches
+                  example: inch
                 volumetric_weight:
                   type: number
                   example: 110.231
