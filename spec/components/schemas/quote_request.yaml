@@ -49,7 +49,7 @@ properties:
   #   example: false
   distance_unit:
     type: string
-    format: cm/in
+    format: cm/inch
     example: cm
   mass_unit:
     type: string
