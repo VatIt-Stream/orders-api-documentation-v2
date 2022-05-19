@@ -1,0 +1,22 @@
+get:
+  parameters:
+    - in: query
+      name: show_all
+      schema:
+        type: boolean
+        enum:
+          - true
+          - false
+      description: Select true not to paginate the results.
+  summary: Dangerous Goods
+  tags:
+    - Static Data
+  responses:
+    '200':
+      description: fetch all the 'dangerous_good' items
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/dangerous_goods'
