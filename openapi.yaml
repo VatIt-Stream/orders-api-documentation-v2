@@ -109,6 +109,29 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/currency'
+  /dangerous_goods:
+    get:
+      parameters:
+        - in: query
+          name: show_all
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+          description: Select true not to paginate the results.
+      summary: Dangerous Goods
+      tags:
+        - Static Data
+      responses:
+        '200':
+          description: fetch all the 'dangerous_good' items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/dangerous_goods'
   /line_item_types:
     get:
       summary: Line Item Types
@@ -609,7 +632,7 @@ components:
           example: GB000000000000
         export_code:
           type: string
-          example: GB000000000000
+          example: '12345678'
         country_id:
           type: integer
           example: 226
@@ -741,12 +764,14 @@ components:
           type: string
           example: Pound
     dangerous_goods:
-      required:
-        - un_code
+      type: object
       properties:
-        un_code:
-          type: string
-          example: UN3090
+        dangerous_good_id:
+          type: integer
+          example: 1
+        pieces:
+          type: integer
+          example: 1
     destination_address:
       type: object
       required:
