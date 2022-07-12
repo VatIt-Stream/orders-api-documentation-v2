@@ -35,7 +35,7 @@ properties:
     example: 226
   export_code:
     type: string
-    example: 'ZA000000000000'
+    example: '12345678'
   email:
     type: string
     example: example@stream.com
