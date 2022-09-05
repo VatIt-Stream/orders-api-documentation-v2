@@ -458,6 +458,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/standard_error'
+  /reason_for_shipments:
+    get:
+      summary: Reason for shipments
+      tags:
+        - Static Data
+      responses:
+        '200':
+          description: fetch all the 'reason_for_shipments' items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/reason_for_shipment'
   /system_configs/export_permit_origin_country_ids:
     get:
       summary: Export Permit Origin Country Ids
@@ -1250,7 +1264,7 @@ components:
           example: 226
         export_code:
           type: string
-          example: 12345678
+          example: '12345678'
         email:
           type: string
           example: example@stream.com
@@ -1395,6 +1409,15 @@ components:
         error:
           type: string
           example: Too many requests (20/20 in 60 seconds)
+    reason_for_shipment:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: String
+          example: Commercial Sale
     scheduled_pickup_request:
       type: object
       properties:

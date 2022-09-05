@@ -667,6 +667,29 @@
         }
       }
     },
+    "/reason_for_shipments": {
+      "get": {
+        "summary": "Reason for shipments",
+        "tags": [
+          "Static Data"
+        ],
+        "responses": {
+          "200": {
+            "description": "fetch all the 'reason_for_shipments' items.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/reason_for_shipment"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/system_configs/export_permit_origin_country_ids": {
       "get": {
         "summary": "Export Permit Origin Country Ids",
@@ -1943,6 +1966,19 @@
           "error": {
             "type": "string",
             "example": "Too many requests (20/20 in 60 seconds)"
+          }
+        }
+      },
+      "reason_for_shipment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "String",
+            "example": "Commercial Sale"
           }
         }
       },
