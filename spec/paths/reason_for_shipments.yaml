@@ -1,0 +1,13 @@
+get:
+  summary: Reason for shipments
+  tags:
+    - Static Data
+  responses:
+    '200':
+      description: fetch all the 'reason_for_shipments' items.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/reason_for_shipment'
