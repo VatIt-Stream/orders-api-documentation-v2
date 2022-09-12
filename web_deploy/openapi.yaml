@@ -729,21 +729,18 @@ components:
         import_code:
           type: string
           example: S1A485
-    clearance_details:
+    clearance_detail:
       type: object
       required:
         - reason_for_shipment_id
         - invoice_number
-        - purchase_order_number
-        - commercial_invoice_placeholder_text
       properties:
         reason_for_shipment_id:
           type: integer
           enum:
-            - 0
             - 1
             - 2
-          example: 0
+          example: 1
         invoice_number:
           type: string
           maxLength: 35
@@ -1222,10 +1219,10 @@ components:
               type: object
               items: null
               $ref: '#/components/schemas/importer_of_record_address'
-            clearance_details:
+            clearance_detail:
               type: object
               items: null
-              $ref: '#/components/schemas/clearance_details'
+              $ref: '#/components/schemas/clearance_detail'
     origin_address:
       type: object
       required:
