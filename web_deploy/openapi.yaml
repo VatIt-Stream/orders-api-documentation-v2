@@ -24,7 +24,7 @@ info:
     <ul>
       <li>Added the ability to send in full address details at the quoting stage.
     </ul>
-  version: 2
+  version: '2'
   title: Stream API
   contact:
     email: developers@vatitstream.com
@@ -1413,7 +1413,7 @@ components:
           type: integer
           example: 1
         name:
-          type: String
+          type: string
           example: Commercial Sale
     scheduled_pickup_request:
       type: object

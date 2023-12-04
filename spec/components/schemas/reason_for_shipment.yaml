@@ -4,5 +4,5 @@ properties:
     type: integer
     example: 1
   name:
-    type: String
+    type: string
     example: Commercial Sale
