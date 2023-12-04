@@ -284,7 +284,6 @@
                  "partially_delivered",
                  "delivered",
                  "invoicing_in_progress",
-                 "invoice_to_be_paid",
                  "invoice_paid",
                  "incomplete",
                  "cancelled",
