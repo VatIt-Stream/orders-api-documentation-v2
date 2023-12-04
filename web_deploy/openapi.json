@@ -261,6 +261,67 @@
       }
     },
     "/orders": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                 "order_received",
+                 "additional_document_required",
+                 "awaiting_waybill_generation",
+                 "awaiting_prepayment",
+                 "prepayment_received",
+                 "client_to_schedule_pickup",
+                 "admin_to_schedule_pickup",
+                 "system_to_schedule_pickup",
+                 "awaiting_pickup",
+                 "awaiting_swap_out",
+                 "pickup_missed",
+                 "in_transit",
+                 "partially_delivered",
+                 "delivered",
+                 "invoicing_in_progress",
+                 "invoice_paid",
+                 "incomplete",
+                 "cancelled",
+                 "lost_in_transit"
+              ]
+            },
+            "required": false,
+            "description": "Select true not to paginate the results."
+          },
+          {
+          "in": "query",
+          "name": "page",
+          "schema": {
+            "type": "number"
+          },
+          "description": "Page number (default 1)"
+          }
+        ],
+        "summary": "Get Orders",
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "get existing orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Order"
@@ -667,29 +728,6 @@
         }
       }
     },
-    "/reason_for_shipments": {
-      "get": {
-        "summary": "Reason for shipments",
-        "tags": [
-          "Static Data"
-        ],
-        "responses": {
-          "200": {
-            "description": "fetch all the 'reason_for_shipments' items.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/reason_for_shipment"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/system_configs/export_permit_origin_country_ids": {
       "get": {
         "summary": "Export Permit Origin Country Ids",
@@ -1055,20 +1093,23 @@
           }
         }
       },
-      "clearance_detail": {
+      "clearance_details": {
         "type": "object",
         "required": [
           "reason_for_shipment_id",
-          "invoice_number"
+          "invoice_number",
+          "purchase_order_number",
+          "commercial_invoice_placeholder_text"
         ],
         "properties": {
           "reason_for_shipment_id": {
             "type": "integer",
             "enum": [
+              0,
               1,
               2
             ],
-            "example": 1
+            "example": 0
           },
           "invoice_number": {
             "type": "string",
@@ -1712,10 +1753,10 @@
                 "items": null,
                 "$ref": "#/components/schemas/importer_of_record_address"
               },
-              "clearance_detail": {
+              "clearance_details": {
                 "type": "object",
                 "items": null,
-                "$ref": "#/components/schemas/clearance_detail"
+                "$ref": "#/components/schemas/clearance_details"
               }
             }
           }
@@ -1963,19 +2004,6 @@
           "error": {
             "type": "string",
             "example": "Too many requests (20/20 in 60 seconds)"
-          }
-        }
-      },
-      "reason_for_shipment": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 1
-          },
-          "name": {
-            "type": "String",
-            "example": "Commercial Sale"
           }
         }
       },
