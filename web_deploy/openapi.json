@@ -261,6 +261,68 @@
       }
     },
     "/orders": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                 "order_received",
+                 "additional_document_required",
+                 "awaiting_waybill_generation",
+                 "awaiting_prepayment",
+                 "prepayment_received",
+                 "client_to_schedule_pickup",
+                 "admin_to_schedule_pickup",
+                 "system_to_schedule_pickup",
+                 "awaiting_pickup",
+                 "awaiting_swap_out",
+                 "pickup_missed",
+                 "in_transit",
+                 "partially_delivered",
+                 "delivered",
+                 "invoicing_in_progress",
+                 "invoice_to_be_paid",
+                 "invoice_paid",
+                 "incomplete",
+                 "cancelled",
+                 "lost_in_transit"
+              ]
+            },
+            "required": false,
+            "description": "Select true not to paginate the results."
+          },
+          {
+          "in": "query",
+          "name": "page",
+          "schema": {
+            "type": "number"
+          },
+          "description": "Page number (default 1)"
+          }
+        ],
+        "summary": "Get Orders",
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "get existing orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Order"
