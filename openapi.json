@@ -12,7 +12,7 @@
   ],
   "info": {
     "description": "<i> Please note that the v2 endpoint is in beta and is actively changing. </i>\n<p> <b> Find our version 1 docs here <a href=\"https://orders-api-v2-docs.vatit-stream.com/swagger-ui/#/\"> https://orders-api-docs.vatit-stream.com/swagger-ui/#/ </a> </b> </p>\n<b>Update 2.2 (2022-01-14) - Updated Quote and Order Endpoints ; </b>\n<ul>\n  <li>Added classification to origin and destination address on quote and order\n  <li>Added clearance details to order\n</ul>\n<b>Update 2.1 (2022-01-14) - Separate Waybills Endpoint</b>\n<ul>\n  <li>Improved error messages from service providers.\n  <li>Placing an order and generating a waybill have been separated into 2 separate endpoints.\n  <li>Place an order by posting to <i>/orders</i> endpoint.\n  <li>Generate waybill with a post to <i>/orders/{order_id}/waybills</i>. </i>\n</ul>\n<b>Update 2.0 (2021-12-23) - API Documentation for Stream</b>\n<ul>\n  <li>Added the ability to send in full address details at the quoting stage.\n</ul>\n",
-    "version": 2,
+    "version": "2",
     "title": "Stream API",
     "contact": {
       "email": "developers@vatitstream.com"
@@ -261,67 +261,6 @@
       }
     },
     "/orders": {
-      "get": {
-        "parameters": [
-          {
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "type": "string",
-              "enum": [
-                 "order_received",
-                 "additional_document_required",
-                 "awaiting_waybill_generation",
-                 "awaiting_prepayment",
-                 "prepayment_received",
-                 "client_to_schedule_pickup",
-                 "admin_to_schedule_pickup",
-                 "system_to_schedule_pickup",
-                 "awaiting_pickup",
-                 "awaiting_swap_out",
-                 "pickup_missed",
-                 "in_transit",
-                 "partially_delivered",
-                 "delivered",
-                 "invoice_to_be_paid",
-                 "invoice_paid",
-                 "incomplete",
-                 "cancelled",
-                 "lost_in_transit"
-              ]
-            },
-            "required": false,
-            "description": "Select true not to paginate the results."
-          },
-          {
-          "in": "query",
-          "name": "page",
-          "schema": {
-            "type": "number"
-          },
-          "description": "Page number (default 1)"
-          }
-        ],
-        "summary": "Get Orders",
-        "tags": [
-          "Order"
-        ],
-        "responses": {
-          "200": {
-            "description": "get existing orders",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/order"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "post": {
         "tags": [
           "Order"
@@ -728,6 +667,29 @@
         }
       }
     },
+    "/reason_for_shipments": {
+      "get": {
+        "summary": "Reason for shipments",
+        "tags": [
+          "Static Data"
+        ],
+        "responses": {
+          "200": {
+            "description": "fetch all the 'reason_for_shipments' items.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/reason_for_shipment"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/system_configs/export_permit_origin_country_ids": {
       "get": {
         "summary": "Export Permit Origin Country Ids",
@@ -1093,23 +1055,20 @@
           }
         }
       },
-      "clearance_details": {
+      "clearance_detail": {
         "type": "object",
         "required": [
           "reason_for_shipment_id",
-          "invoice_number",
-          "purchase_order_number",
-          "commercial_invoice_placeholder_text"
+          "invoice_number"
         ],
         "properties": {
           "reason_for_shipment_id": {
             "type": "integer",
             "enum": [
-              0,
               1,
               2
             ],
-            "example": 0
+            "example": 1
           },
           "invoice_number": {
             "type": "string",
@@ -1753,10 +1712,10 @@
                 "items": null,
                 "$ref": "#/components/schemas/importer_of_record_address"
               },
-              "clearance_details": {
+              "clearance_detail": {
                 "type": "object",
                 "items": null,
-                "$ref": "#/components/schemas/clearance_details"
+                "$ref": "#/components/schemas/clearance_detail"
               }
             }
           }
@@ -2004,6 +1963,19 @@
           "error": {
             "type": "string",
             "example": "Too many requests (20/20 in 60 seconds)"
+          }
+        }
+      },
+      "reason_for_shipment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Commercial Sale"
           }
         }
       },
