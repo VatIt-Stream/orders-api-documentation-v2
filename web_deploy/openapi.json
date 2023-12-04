@@ -283,7 +283,7 @@
                  "in_transit",
                  "partially_delivered",
                  "delivered",
-                 "invoice_to_be_paid",
+                 "invoicing_in_progress",
                  "invoice_paid",
                  "incomplete",
                  "cancelled",
