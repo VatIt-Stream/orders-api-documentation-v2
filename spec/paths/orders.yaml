@@ -56,9 +56,21 @@ get:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/order'
+            type: object
+            properties:
+              orders:
+                type: array
+                items:
+                  $ref: '#/components/schemas/orders_response'
+              meta:
+                type: object
+                properties:
+                  page_count:
+                    type: integer
+                    example: 1
+                  record_count:
+                    type: integer
+                    example: 1
     '400':
       description: 'invalid input, object invalid'
       content:
