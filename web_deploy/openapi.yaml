@@ -242,9 +242,21 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/order'
+                type: object
+                properties:
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/orders_response'
+                  meta:
+                    type: object
+                    properties:
+                      page_count:
+                        type: integer
+                        example: 1
+                      record_count:
+                        type: integer
+                        example: 1
         '400':
           description: 'invalid input, object invalid'
           content:
@@ -1290,6 +1302,119 @@ components:
               type: object
               items: null
               $ref: '#/components/schemas/clearance_detail'
+    orders_response:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        purpose_of_shipment_id:
+          type: integer
+          example: 8
+        pickup_date:
+          type: string
+          example: 20-01-2020
+        status:
+          type: string
+          example: order_received
+        waybill:
+          type: string
+          example: '123456789'
+        tracking_link:
+          type: string
+          example: wwww.streamfiles.com/order123/tracking
+        reference_number:
+          type: string
+          example: Stream0014
+        customer_reference:
+          type: string
+          example: Ref0000
+        measured_weight:
+          type: integer
+          example: 230
+        description_of_contents:
+          type: string
+          example: Networking Equipment
+        date_delivered:
+          type: string
+          example: 22-02-2020
+        internal_transaction_number:
+          type: string
+          example: '235688794235684'
+        quote_id:
+          type: integer
+          example: 1
+        commercial_invoice_link:
+          type: string
+          example: wwww.streamfiles.com/order123/commercial_invoice
+        packaging_list_link:
+          type: string
+          example: wwww.streamfiles.com/order123/packaging_list
+        waybill_document_link:
+          type: string
+          example: wwww.streamfiles.com/order123/waybill_document
+        customs_clearance_document_link:
+          type: string
+          example: wwww.streamfiles.com/order123/customs_clearance_document
+        materials_safety_data_sheet_link:
+          type: string
+          example: wwww.streamfiles.com/order123/materials_safety_data_sheet
+        battery_declaration_link:
+          type: string
+          example: wwww.streamfiles.com/order123/battery_declaration
+        invoice_document_link:
+          type: string
+          example: wwww.streamfiles.com/order123/invoice_document
+        proof_of_delivery_link:
+          type: string
+          example: wwww.streamfiles.com/order123/proof_of_delivery
+        draft_bill_of_lading_link:
+          type: string
+          example: wwww.streamfiles.com/order123/draft_bill_of_lading
+        final_bill_of_lading_link:
+          type: string
+          example: wwww.streamfiles.com/order123/final_bill_of_lading
+        shippers_letter_of_instruction_link:
+          type: string
+          example: wwww.streamfiles.com/order123/shippers_letter_of_instruction
+        eei_request_document_link:
+          type: string
+          example: wwww.streamfiles.com/order123/eei_request_document
+        export_permit_link:
+          type: string
+          example: wwww.streamfiles.com/order123/export_permit
+        invoice_number:
+          type: string
+          example: '123456'
+        eei_eligible:
+          type: boolean
+          example: true
+        ccd_status:
+          type: string
+          example: not_required
+        origin_address:
+          type: object
+          items: null
+          $ref: '#/components/schemas/address'
+        destination_address:
+          type: object
+          item: null
+          $ref: '#/components/schemas/address'
+        broker_address:
+          type: object
+          item: null
+          $ref: '#/components/schemas/broker_address'
+        importer_of_record_address:
+          type: object
+          item: null
+          $ref: '#/components/schemas/importer_of_record_address'
+        assigned_admin:
+          type: string
+          example: admin@vatitstream.com
+        invoice_data:
+          type: object
+          item: null
+          $ref: '#/components/schemas/estimate'
     origin_address:
       type: object
       required:
