@@ -1,8 +1,0 @@
-type: object
-properties:
-  dangerous_good_id:
-    type: integer
-    example: 1
-  pieces:
-    type: integer
-    example: 1

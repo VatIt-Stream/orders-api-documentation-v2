@@ -33,9 +33,6 @@ properties:
   # is_shipment_protection_required:
   #   type: boolean
   #   example: true
-  # dangerous_goods_present:
-  #   type: boolean
-  #   example: false
   # distance_unit:
   #   type: string
   #   format: cm/inch
@@ -51,10 +48,6 @@ properties:
   #   type: array
   #   items:
   #     $ref: '#/components/schemas/package'
-  # dangerous_goods:
-  #   type: array
-  #   items:
-  #     $ref: '#/components/schemas/dangerous_goods'
   # hs_codes:
   #   type: array
   #   items:
